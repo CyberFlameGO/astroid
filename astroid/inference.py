@@ -972,7 +972,8 @@ def _do_compare(
 ) -> bool | type[util.Uninferable]:
     """
     If all possible combinations are either True or False, return that:
-    >>> _do_compare([1, 2], '<=', [3, 4])
+    >>> _do_compare([1, 2], '<=', [3, 4]).
+
     True
     >>> _do_compare([1, 2], '==', [3, 4])
     False

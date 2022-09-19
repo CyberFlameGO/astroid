@@ -680,7 +680,8 @@ def starred_assigned_stmts(
 ) -> Any:
     """
     Arguments:
-        self: nodes.Starred
+        self: nodes.Starred.
+
         node: a node related to the current underlying Node.
         context: Inference context used for caching already inferred objects
         assign_path:

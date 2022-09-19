@@ -49,7 +49,7 @@ class InferenceContext:
             self._nodes_inferred = nodes_inferred
         self.path = path or set()
         """
-        :type: set(tuple(NodeNG, optional(str)))
+        :type: set(tuple(NodeNG, optional(str))).
 
         Path of visited nodes and their lookupname
 
@@ -66,7 +66,7 @@ class InferenceContext:
         """The call arguments and keywords for the given context."""
         self.boundnode = None
         """
-        :type: optional[NodeNG]
+        :type: optional[NodeNG].
 
         The bound node of the given context
 
@@ -74,7 +74,7 @@ class InferenceContext:
         """
         self.extra_context = {}
         """
-        :type: dict(NodeNG, Context)
+        :type: dict(NodeNG, Context).
 
         Context that needs to be passed down through call stacks
         for call arguments
@@ -178,7 +178,8 @@ def copy_context(context: InferenceContext | None) -> InferenceContext:
 
 def bind_context_to_node(context, node):
     """Give a context a boundnode
-    to retrieve the correct function name or attribute value
+    to retrieve the correct function name or attribute value.
+
     with from further inference.
 
     Do not use an existing context since the boundnode could then

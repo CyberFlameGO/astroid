@@ -1329,6 +1329,7 @@ class AugAssign(_base_nodes.AssignTypeNode, _base_nodes.Statement):
     ) -> None:
         """
         :param op: The operator that is being combined with the assignment.
+
             This includes the equals sign.
 
         :param lineno: The line that this node appears on in the source code.
@@ -1803,9 +1804,7 @@ class Comprehension(NodeNG):
     end_col_offset: None
 
     def __init__(self, parent: NodeNG | None = None) -> None:
-        """
-        :param parent: The parent node in the syntax tree.
-        """
+        """:param parent: The parent node in the syntax tree."""
         self.target: NodeNG | None = None
         """What is assigned to by the comprehension."""
 

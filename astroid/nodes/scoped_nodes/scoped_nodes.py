@@ -4,7 +4,8 @@
 
 """
 This module contains the classes for "scoped" node, i.e. which are opening a
-new local scope in the language definition : Module, ClassDef, FunctionDef (and
+new local scope in the language definition : Module, ClassDef, FunctionDef (and.
+
 Lambda, GeneratorExp, DictComp and SetComp to some extent).
 """
 
@@ -785,6 +786,7 @@ class DictComp(ComprehensionScope):
     ):
         """
         :param lineno: The line that this node appears on in the source code.
+
         :type lineno: int or None
 
         :param col_offset: The column that this node appears on in the
@@ -882,6 +884,7 @@ class SetComp(ComprehensionScope):
     ):
         """
         :param lineno: The line that this node appears on in the source code.
+
         :type lineno: int or None
 
         :param col_offset: The column that this node appears on in the
@@ -1090,6 +1093,7 @@ class Lambda(_base_nodes.FilterStmtsBaseNode, LocalsDictNodeNG):
     ):
         """
         :param lineno: The line that this node appears on in the source code.
+
         :type lineno: int or None
 
         :param col_offset: The column that this node appears on in the
@@ -1173,7 +1177,8 @@ class Lambda(_base_nodes.FilterStmtsBaseNode, LocalsDictNodeNG):
 
     def argnames(self) -> list[str]:
         """Get the names of each of the arguments, including that
-        of the collections of variable-length arguments ("args", "kwargs",
+        of the collections of variable-length arguments ("args", "kwargs",.
+
         etc.), as well as positional-only and keyword-only arguments.
 
         :returns: The names of the arguments.
@@ -1331,6 +1336,7 @@ class FunctionDef(_base_nodes.MultiLineBlockNode, _base_nodes.Statement, Lambda)
     ):
         """
         :param name: The name of the function.
+
         :type name: str or None
 
         :param doc: The function docstring.
@@ -1983,6 +1989,7 @@ class ClassDef(
     ):
         """
         :param name: The name of the class.
+
         :type name: str or None
 
         :param doc: The class docstring.
