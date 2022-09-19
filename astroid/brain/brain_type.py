@@ -28,7 +28,7 @@ from astroid.manager import AstroidManager
 
 def _looks_like_type_subscript(node):
     """
-    Try to figure out if a Name node is used inside a type related subscript
+    Try to figure out if a Name node is used inside a type related subscript.
 
     :param node: node to check
     :type node: astroid.nodes.node_classes.NodeNG
@@ -42,7 +42,7 @@ def _looks_like_type_subscript(node):
 
 def infer_type_sub(node, context=None):
     """
-    Infer a type[...] subscript
+    Infer a type[...] subscript.
 
     :param node: node to infer
     :type node: astroid.nodes.node_classes.NodeNG

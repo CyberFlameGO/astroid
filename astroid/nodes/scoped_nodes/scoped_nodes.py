@@ -73,7 +73,6 @@ def _c3_merge(sequences, cls, context):
     """Merges MROs in *sequences* to a single MRO using the C3 algorithm.
 
     Adapted from http://www.python.org/download/releases/2.3/mro/.
-
     """
     result = []
     while True:
@@ -109,7 +108,9 @@ def _c3_merge(sequences, cls, context):
 
 def clean_typing_generic_mro(sequences: list[list[ClassDef]]) -> None:
     """A class can inherit from typing.Generic directly, as base,
-    and as base of bases. The merged MRO must however only contain the last entry.
+    and as base of bases.
+
+    The merged MRO must however only contain the last entry.
     To prepare for _c3_merge, remove some typing.Generic entries from
     sequences if multiple are present.
 
@@ -691,6 +692,7 @@ class GeneratorExp(ComprehensionScope):
     ):
         """
         :param lineno: The line that this node appears on in the source code.
+
         :type lineno: int or None
 
         :param col_offset: The column that this node appears on in the
@@ -1292,17 +1294,19 @@ class FunctionDef(_base_nodes.MultiLineBlockNode, _base_nodes.Statement, Lambda)
     :type: bool
     """
     type_annotation = None
-    """If present, this will contain the type annotation passed by a type comment
+    """If present, this will contain the type annotation passed by a type comment.
 
     :type: NodeNG or None
     """
     type_comment_args = None
     """
     If present, this will contain the type annotation for arguments
-    passed by a type comment
+    passed by a type comment.
     """
     type_comment_returns = None
-    """If present, this will contain the return type annotation, passed by a type comment"""
+    """If present, this will contain the return type annotation, passed by a type
+    comment.
+    """
     # attributes below are set by the builder module or by raw factories
     _other_fields = ("name", "doc", "position")
     _other_other_fields = (
@@ -1675,7 +1679,7 @@ class FunctionDef(_base_nodes.MultiLineBlockNode, _base_nodes.Statement, Lambda)
         return bool(next(self._get_yield_nodes_skip_lambdas(), False))
 
     def infer_yield_result(self, context=None):
-        """Infer what the function yields when called
+        """Infer what the function yields when called.
 
         :returns: What the function yields
         :rtype: iterable(NodeNG or Uninferable) or None
@@ -1818,7 +1822,7 @@ class AsyncFunctionDef(FunctionDef):
 
 
 def _rec_get_names(args, names: list[str] | None = None) -> list[str]:
-    """return a list of all argument names"""
+    """Return a list of all argument names."""
     if names is None:
         names = []
     for arg in args:
@@ -1864,8 +1868,8 @@ def _is_metaclass(klass, seen=None):
 
 
 def _class_type(klass, ancestors=None):
-    """return a ClassDef node type to differ metaclass and exception
-    from 'regular' classes
+    """Return a ClassDef node type to differ metaclass and exception
+    from 'regular' classes.
     """
     # XXX we have to store ancestors in case we have an ancestor loop
     if klass._type is not None:
@@ -2287,7 +2291,7 @@ class ClassDef(
         return result
 
     def infer_call_result(self, caller, context=None):
-        """infer what a class is returning when called"""
+        """Infer what a class is returning when called."""
         if self.is_subtype_of("builtins.type", context) and len(caller.args) == 3:
             result = self._infer_type_call(caller, context)
             yield result
@@ -2368,7 +2372,7 @@ class ClassDef(
 
     @property
     def basenames(self):
-        """The names of the parent classes
+        """The names of the parent classes.
 
         Names are given in the order they appear in the class definition.
 

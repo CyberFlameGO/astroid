@@ -49,7 +49,7 @@ class ParserModule(NamedTuple):
 
 
 def parse_function_type_comment(type_comment: str) -> FunctionType | None:
-    """Given a correct type comment, obtain a FunctionType object"""
+    """Given a correct type comment, obtain a FunctionType object."""
     if _ast_py3 is None:
         return None
 

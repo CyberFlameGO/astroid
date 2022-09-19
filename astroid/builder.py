@@ -2,7 +2,7 @@
 # For details: https://github.com/PyCQA/astroid/blob/main/LICENSE
 # Copyright (c) https://github.com/PyCQA/astroid/blob/main/CONTRIBUTORS.txt
 
-"""The AstroidBuilder makes astroid from living object and / or from _ast
+"""The AstroidBuilder makes astroid from living object and / or from _ast.
 
 The builder is not thread safe and can't be used to parse different sources
 at the same time.
@@ -97,7 +97,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
         return node
 
     def file_build(self, path, modname=None):
-        """Build astroid from a source code file (i.e. from an ast)
+        """Build astroid from a source code file (i.e. from an ast).
 
         *path* is expected to be a python source file
         """
@@ -143,7 +143,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
     def _post_build(
         self, module: nodes.Module, builder: rebuilder.TreeRebuilder, encoding: str
     ) -> nodes.Module:
-        """Handles encoding and delayed nodes after a module has been built"""
+        """Handles encoding and delayed nodes after a module has been built."""
         module.file_encoding = encoding
         self._manager.cache_module(module)
         # post tree building steps after we stored the module in the cache:
@@ -164,7 +164,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
     def _data_build(
         self, data: str, modname, path
     ) -> tuple[nodes.Module, rebuilder.TreeRebuilder]:
-        """Build tree node from data and add some informations"""
+        """Build tree node from data and add some informations."""
         try:
             node, parser_module = _parse_string(data, type_comments=True)
         except (TypeError, ValueError, SyntaxError) as exc:
@@ -193,7 +193,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
         return module, builder
 
     def add_from_names_to_locals(self, node):
-        """Store imported names to the locals
+        """Store imported names to the locals.
 
         Resort the locals if coming from a delayed node
         """
@@ -218,7 +218,7 @@ class AstroidBuilder(raw_building.InspectBuilder):
                 sort_locals(node.parent.scope().locals[asname or name])
 
     def delayed_assattr(self, node):
-        """Visit a AssAttr node
+        """Visit a AssAttr node.
 
         This adds name to locals and handle members definition.
         """
@@ -266,7 +266,7 @@ def build_namespace_package_module(name: str, path: list[str]) -> nodes.Module:
 
 
 def parse(code, module_name="", path=None, apply_transforms=True):
-    """Parses a source string in order to obtain an astroid AST from it
+    """Parses a source string in order to obtain an astroid AST from it.
 
     :param str code: The code for the module.
     :param str module_name: The name for the module, if any

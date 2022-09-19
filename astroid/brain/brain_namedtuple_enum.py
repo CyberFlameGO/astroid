@@ -160,7 +160,7 @@ def infer_func_form(
 
 
 def _has_namedtuple_base(node):
-    """Predicate for class inference tip
+    """Predicate for class inference tip.
 
     :type node: ClassDef
     :rtype: bool
@@ -185,7 +185,7 @@ _looks_like_typing_namedtuple = functools.partial(_looks_like, name="NamedTuple"
 def infer_named_tuple(
     node: nodes.Call, context: InferenceContext | None = None
 ) -> Iterator[nodes.ClassDef]:
-    """Specific inference function for namedtuple Call node"""
+    """Specific inference function for namedtuple Call node."""
     tuple_base_name: list[nodes.NodeNG] = [nodes.Name(name="tuple", parent=node.root())]
     class_node, name, attributes = infer_func_form(
         node, tuple_base_name, context=context
@@ -461,7 +461,7 @@ def infer_enum_class(node: nodes.ClassDef) -> nodes.ClassDef:
 
 
 def infer_typing_namedtuple_class(class_node, context=None):
-    """Infer a subclass of typing.NamedTuple"""
+    """Infer a subclass of typing.NamedTuple."""
     # Check if it has the corresponding bases
     annassigns_fields = [
         annassign.target.name
@@ -496,6 +496,7 @@ def infer_typing_namedtuple_class(class_node, context=None):
 def infer_typing_namedtuple_function(node, context=None):
     """
     Starting with python3.9, NamedTuple is a function of the typing module.
+
     The class NamedTuple is build dynamically through a call to `type` during
     initialization of the `_NamedTuple` variable.
     """

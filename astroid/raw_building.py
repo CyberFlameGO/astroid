@@ -2,8 +2,8 @@
 # For details: https://github.com/PyCQA/astroid/blob/main/LICENSE
 # Copyright (c) https://github.com/PyCQA/astroid/blob/main/CONTRIBUTORS.txt
 
-"""this module contains a set of functions to create astroid trees from scratch
-(build_* functions) or from living object (object_build_* functions)
+"""This module contains a set of functions to create astroid trees from scratch
+(build_* functions) or from living object (object_build_* functions).
 """
 
 from __future__ import annotations
@@ -59,8 +59,8 @@ _marker = object()
 
 
 def attach_dummy_node(node, name, runtime_object=_marker):
-    """create a dummy node and register it in the locals of the given
-    node with the specified name
+    """Create a dummy node and register it in the locals of the given
+    node with the specified name.
     """
     enode = nodes.EmptyNode()
     enode.object = runtime_object
@@ -75,23 +75,23 @@ nodes.EmptyNode.has_underlying_object = _has_underlying_object
 
 
 def attach_const_node(node, name, value):
-    """create a Const node and register it in the locals of the given
-    node with the specified name
+    """Create a Const node and register it in the locals of the given
+    node with the specified name.
     """
     if name not in node.special_attributes:
         _attach_local_node(node, nodes.const_factory(value), name)
 
 
 def attach_import_node(node, modname, membername):
-    """create a ImportFrom node and register it in the locals of the given
-    node with the specified name
+    """Create a ImportFrom node and register it in the locals of the given
+    node with the specified name.
     """
     from_node = nodes.ImportFrom(modname, [(membername, None)])
     _attach_local_node(node, from_node, membername)
 
 
 def build_module(name: str, doc: str | None = None) -> nodes.Module:
-    """create and initialize an astroid Module node"""
+    """Create and initialize an astroid Module node."""
     node = nodes.Module(name, pure_python=False, package=False)
     node.postinit(
         body=[],
@@ -122,7 +122,7 @@ def build_function(
     doc: str | None = None,
     kwonlyargs: list[str] | None = None,
 ) -> nodes.FunctionDef:
-    """create and initialize an astroid FunctionDef node"""
+    """Create and initialize an astroid FunctionDef node."""
     # first argument is now a list of decorators
     func = nodes.FunctionDef(name)
     argsnode = nodes.Arguments(parent=func)
@@ -161,12 +161,12 @@ def build_function(
 
 
 def build_from_import(fromname, names):
-    """create and initialize an astroid ImportFrom import statement"""
+    """Create and initialize an astroid ImportFrom import statement."""
     return nodes.ImportFrom(fromname, [(name, None) for name in names])
 
 
 def register_arguments(func, args=None):
-    """add given arguments to local
+    """Add given arguments to local.
 
     args is a list that may contains nested lists
     (i.e. def func(a, (b, c, d)): ...)
@@ -187,7 +187,7 @@ def register_arguments(func, args=None):
 def object_build_class(
     node: nodes.Module | nodes.ClassDef, member: type, localname: str
 ) -> nodes.ClassDef:
-    """create astroid for a living class object"""
+    """Create astroid for a living class object."""
     basenames = [base.__name__ for base in member.__bases__]
     return _base_class_object_build(node, member, basenames, localname=localname)
 
@@ -225,7 +225,7 @@ def _get_args_info_from_callable(
 def object_build_function(
     node: nodes.Module | nodes.ClassDef, member: _FunctionTypes, localname: str
 ) -> None:
-    """create astroid for a living function object"""
+    """Create astroid for a living function object."""
     args, posonlyargs, defaults, kwonlyargs = _get_args_info_from_callable(member)
 
     func = build_function(
@@ -243,7 +243,7 @@ def object_build_function(
 def object_build_datadescriptor(
     node: nodes.Module | nodes.ClassDef, member: type, name: str
 ) -> nodes.ClassDef:
-    """create astroid for a living data descriptor object"""
+    """Create astroid for a living data descriptor object."""
     return _base_class_object_build(node, member, [], name)
 
 
@@ -252,7 +252,7 @@ def object_build_methoddescriptor(
     member: _FunctionTypes,
     localname: str,
 ) -> None:
-    """create astroid for a living method descriptor object"""
+    """Create astroid for a living method descriptor object."""
     # FIXME get arguments ?
     func = build_function(
         getattr(member, "__name__", None) or localname, doc=member.__doc__
@@ -268,8 +268,8 @@ def _base_class_object_build(
     name: str | None = None,
     localname: str | None = None,
 ) -> nodes.ClassDef:
-    """create astroid for a living class object, with a given set of base names
-    (e.g. ancestors)
+    """Create astroid for a living class object, with a given set of base names
+    (e.g. ancestors).
     """
     class_name = name or getattr(member, "__name__", None) or localname
     assert isinstance(class_name, str)
@@ -332,7 +332,7 @@ def _safe_has_attribute(obj, member):
 
 
 class InspectBuilder:
-    """class for building nodes from living object
+    """Class for building nodes from living object.
 
     this is actually a really minimal representation, including only Module,
     FunctionDef and ClassDef nodes and some others as guessed.
@@ -349,8 +349,9 @@ class InspectBuilder:
         modname: str | None = None,
         path: str | None = None,
     ) -> nodes.Module:
-        """build astroid from a living module (i.e. using inspect)
-        this is used when there is no python source code available (either
+        """Build astroid from a living module (i.e. using inspect)
+        this is used when there is no python source code available (either.
+
         because it's a built-in module or because the .py is not available)
         """
         self._module = module
@@ -376,8 +377,8 @@ class InspectBuilder:
     def object_build(
         self, node: nodes.Module | nodes.ClassDef, obj: types.ModuleType | type
     ) -> None:
-        """recursive method which create a partial ast from real objects
-        (only function, class, and method are handled)
+        """Recursive method which create a partial ast from real objects
+        (only function, class, and method are handled).
         """
         if obj in self._done:
             return None
@@ -437,7 +438,7 @@ class InspectBuilder:
         return None
 
     def imported_member(self, node, member, name: str) -> bool:
-        """verify this is not an imported class or handle it"""
+        """Verify this is not an imported class or handle it."""
         # /!\ some classes like ExtensionClass doesn't have a __module__
         # attribute ! Also, this may trigger an exception on badly built module
         # (see http://www.logilab.org/ticket/57299 for instance)
@@ -487,7 +488,7 @@ def _set_proxied(const):
 
 
 def _astroid_bootstrapping():
-    """astroid bootstrapping the builtins module"""
+    """Astroid bootstrapping the builtins module."""
     # this boot strapping is necessary since we need the Const nodes to
     # inspect_build builtins, and then we can proxy Const
     builder = InspectBuilder()

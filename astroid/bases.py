@@ -100,7 +100,7 @@ def _is_property(meth, context=None):
 
 
 class Proxy:
-    """a simple proxy object
+    """A simple proxy object.
 
     Note:
 
@@ -202,7 +202,9 @@ def _infer_method_result_truth(instance, method_name, context):
 
 
 class BaseInstance(Proxy):
-    """An instance base class, which provides lookup methods for potential instances."""
+    """An instance base class, which provides lookup methods for potential
+    instances.
+    """
 
     special_attributes = None
 
@@ -236,7 +238,7 @@ class BaseInstance(Proxy):
         return values
 
     def igetattr(self, name, context=None):
-        """inferred getattr"""
+        """Inferred getattr."""
         if not context:
             context = InferenceContext()
         try:
@@ -267,7 +269,7 @@ class BaseInstance(Proxy):
                 raise InferenceError(**vars(error)) from error
 
     def _wrap_attr(self, attrs, context=None):
-        """wrap bound methods of attrs in a InstanceMethod proxies"""
+        """Wrap bound methods of attrs in a InstanceMethod proxies."""
         for attr in attrs:
             if isinstance(attr, UnboundMethod):
                 if _is_property(attr):
@@ -285,7 +287,7 @@ class BaseInstance(Proxy):
     def infer_call_result(
         self, caller: nodes.Call | Proxy, context: InferenceContext | None = None
     ):
-        """infer what a class instance is returning when called"""
+        """Infer what a class instance is returning when called."""
         context = bind_context_to_node(context, self)
         inferred = False
 
@@ -339,7 +341,7 @@ class Instance(BaseInstance):
         return "Instance of"
 
     def bool_value(self, context=None):
-        """Infer the truth value for an Instance
+        """Infer the truth value for an Instance.
 
         The truth value of an instance is determined by these conditions:
 
@@ -385,7 +387,7 @@ class Instance(BaseInstance):
 
 
 class UnboundMethod(Proxy):
-    """a special node representing a method not bound to an instance"""
+    """A special node representing a method not bound to an instance."""
 
     # pylint: disable=unnecessary-lambda
     special_attributes = lazy_descriptor(lambda: objectmodel.UnboundMethodModel())
@@ -467,7 +469,7 @@ class UnboundMethod(Proxy):
 
 
 class BoundMethod(UnboundMethod):
-    """a special node representing a method bound to an instance"""
+    """A special node representing a method bound to an instance."""
 
     # pylint: disable=unnecessary-lambda
     special_attributes = lazy_descriptor(lambda: objectmodel.BoundMethodModel())
@@ -596,7 +598,7 @@ class BoundMethod(UnboundMethod):
 
 
 class Generator(BaseInstance):
-    """a special node representing a generator.
+    """A special node representing a generator.
 
     Proxied class is set once for all in raw_building.
     """
@@ -634,7 +636,7 @@ class Generator(BaseInstance):
 
 
 class AsyncGenerator(Generator):
-    """Special node representing an async generator"""
+    """Special node representing an async generator."""
 
     def pytype(self) -> Literal["builtins.async_generator"]:
         return "builtins.async_generator"

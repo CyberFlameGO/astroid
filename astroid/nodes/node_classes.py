@@ -2,7 +2,10 @@
 # For details: https://github.com/PyCQA/astroid/blob/main/LICENSE
 # Copyright (c) https://github.com/PyCQA/astroid/blob/main/CONTRIBUTORS.txt
 
-"""Module for some node classes. More nodes in scoped_nodes.py"""
+"""Module for some node classes.
+
+More nodes in scoped_nodes.py
+"""
 
 from __future__ import annotations
 
@@ -82,7 +85,8 @@ InferUnaryOp = Callable[[_NodesT, str], ConstFactoryResult]
 
 @decorators.raise_if_nothing_inferred
 def unpack_infer(stmt, context=None):
-    """recursively generate nodes inferred by the given statement.
+    """Recursively generate nodes inferred by the given statement.
+
     If the inferred value is a list or a tuple, recurse on the elements
     """
     if isinstance(stmt, (List, Tuple)):
@@ -108,7 +112,7 @@ def unpack_infer(stmt, context=None):
 
 
 def are_exclusive(stmt1, stmt2, exceptions: list[str] | None = None) -> bool:
-    """return true if the two given statements are mutually exclusive
+    """Return true if the two given statements are mutually exclusive.
 
     `exceptions` may be a list of exception names. If specified, discard If
     branches and check one of the statement is in an exception handler catching
@@ -435,6 +439,7 @@ class AssignName(_base_nodes.NoChildrenNode, LookupMixIn, _base_nodes.ParentAssi
 
     assigned_stmts: ClassVar[AssignedStmtsCall[AssignName]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -643,7 +648,9 @@ class Arguments(_base_nodes.AssignTypeNode):
         """The arguments that can only be passed positionally."""
 
         self.kw_defaults: list[NodeNG | None]
-        """The default values for keyword arguments that cannot be passed positionally."""
+        """The default values for keyword arguments that cannot be passed
+        positionally.
+        """
 
         self.annotations: list[NodeNG | None]
         """The type annotations of arguments that can be passed positionally."""
@@ -762,6 +769,7 @@ class Arguments(_base_nodes.AssignTypeNode):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[Arguments]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -781,7 +789,9 @@ class Arguments(_base_nodes.AssignTypeNode):
 
     @cached_property
     def arguments(self):
-        """Get all the arguments for this node, including positional only and positional and keyword"""
+        """Get all the arguments for this node, including positional only and positional
+        and keyword.
+        """
         return list(itertools.chain((self.posonlyargs or ()), self.args or ()))
 
     def format_args(self, *, skippable_names: set[str] | None = None) -> str:
@@ -1033,6 +1043,7 @@ class AssignAttr(_base_nodes.ParentAssignNode):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[AssignAttr]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -1150,7 +1161,9 @@ class Assign(_base_nodes.AssignTypeNode, _base_nodes.Statement):
         """The value being assigned to the variables."""
 
         self.type_annotation: NodeNG | None = None  # can be None
-        """If present, this will contain the type annotation passed by a type comment"""
+        """If present, this will contain the type annotation passed by a type
+        comment.
+        """
 
         super().__init__(
             lineno=lineno,
@@ -1179,6 +1192,7 @@ class Assign(_base_nodes.AssignTypeNode, _base_nodes.Statement):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[Assign]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -1276,6 +1290,7 @@ class AnnAssign(_base_nodes.AssignTypeNode, _base_nodes.Statement):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[AnnAssign]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -1362,6 +1377,7 @@ class AugAssign(_base_nodes.AssignTypeNode, _base_nodes.Statement):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[AugAssign]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -1394,7 +1410,7 @@ class AugAssign(_base_nodes.AssignTypeNode, _base_nodes.Statement):
         yield self.value
 
     def _get_yield_nodes_skip_lambdas(self):
-        """An AugAssign node can contain a Yield node in the value"""
+        """An AugAssign node can contain a Yield node in the value."""
         yield from self.value._get_yield_nodes_skip_lambdas()
         yield from super()._get_yield_nodes_skip_lambdas()
 
@@ -1751,7 +1767,7 @@ class Compare(NodeNG):
             yield comparator  # we don't want the 'op'
 
     def last_child(self):
-        """An optimized version of list(get_children())[-1]
+        """An optimized version of list(get_children())[-1].
 
         :returns: The last child.
         :rtype: NodeNG
@@ -1831,6 +1847,7 @@ class Comprehension(NodeNG):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[Comprehension]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -1845,7 +1862,7 @@ class Comprehension(NodeNG):
     def _get_filtered_stmts(
         self, lookup_node, node, stmts, mystmt: _base_nodes.Statement | None
     ):
-        """method used in filter_stmts"""
+        """Method used in filter_stmts."""
         if self is mystmt:
             if isinstance(lookup_node, (Const, Name)):
                 return [lookup_node], True
@@ -1914,7 +1931,10 @@ class Const(_base_nodes.NoChildrenNode, Instance):
         """The value that the constant represents."""
 
         self.kind: str | None = kind  # can be None
-        """"The string prefix. "u" for u-prefixed strings and ``None`` otherwise. Python 3.8+ only."""
+        """"The string prefix.
+
+        "u" for u-prefixed strings and ``None`` otherwise. Python 3.8+ only.
+        """
 
         super().__init__(
             lineno=lineno,
@@ -2089,6 +2109,7 @@ class Decorators(NodeNG):
 
     def scope(self) -> LocalsDictNodeNG:
         """The first parent node defining a new scope.
+
         These can be Module, FunctionDef, ClassDef, Lambda, or GeneratorExp nodes.
 
         :returns: The first parent scope node.
@@ -2333,7 +2354,7 @@ class Dict(NodeNG, Instance):
             yield value
 
     def last_child(self):
-        """An optimized version of list(get_children())[-1]
+        """An optimized version of list(get_children())[-1].
 
         :returns: The last child, or None if no children exist.
         :rtype: NodeNG or None
@@ -2478,7 +2499,7 @@ class EmptyNode(_base_nodes.NoChildrenNode):
 class ExceptHandler(
     _base_nodes.MultiLineBlockNode, _base_nodes.AssignTypeNode, _base_nodes.Statement
 ):
-    """Class representing an :class:`ast.ExceptHandler`. node.
+    """Class representing an :class:`ast.ExceptHandler` node.
 
     An :class:`ExceptHandler` is an ``except`` block on a try-except.
 
@@ -2542,6 +2563,7 @@ class ExceptHandler(
 
     assigned_stmts: ClassVar[AssignedStmtsCall[ExceptHandler]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -2588,7 +2610,7 @@ class ExceptHandler(
         return self.lineno
 
     def catch(self, exceptions: list[str] | None) -> bool:
-        """Check if this node handles any of the given
+        """Check if this node handles any of the given.
 
         :param exceptions: The names of the exceptions to check for.
         """
@@ -2665,7 +2687,9 @@ class For(
         """The contents of the ``else`` block of the loop."""
 
         self.type_annotation: NodeNG | None = None  # can be None
-        """If present, this will contain the type annotation passed by a type comment"""
+        """If present, this will contain the type annotation passed by a type
+        comment.
+        """
 
         super().__init__(
             lineno=lineno,
@@ -2704,6 +2728,7 @@ class For(
 
     assigned_stmts: ClassVar[AssignedStmtsCall[For]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -3100,7 +3125,7 @@ class If(_base_nodes.MultiLineWithElseBlockNode, _base_nodes.Statement):
         return len(self.orelse) == 1 and isinstance(self.orelse[0], If)
 
     def _get_yield_nodes_skip_lambdas(self):
-        """An If node can contain a Yield node in the test"""
+        """An If node can contain a Yield node in the test."""
         yield from self.test._get_yield_nodes_skip_lambdas()
         yield from super()._get_yield_nodes_skip_lambdas()
 
@@ -3158,6 +3183,7 @@ class If(_base_nodes.MultiLineWithElseBlockNode, _base_nodes.Statement):
 
 class IfExp(NodeNG):
     """Class representing an :class:`ast.IfExp` node.
+
     >>> import astroid
     >>> node = astroid.extract_node('value if condition else other')
     >>> node
@@ -3236,6 +3262,7 @@ class IfExp(NodeNG):
 
 class Import(_base_nodes.ImportNode):
     """Class representing an :class:`ast.Import` node.
+
     >>> import astroid
     >>> node = astroid.extract_node('import astroid')
     >>> node
@@ -3409,6 +3436,7 @@ class List(BaseContainer):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[List]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -3841,6 +3869,7 @@ class Starred(_base_nodes.ParentAssignNode):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[Starred]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -4174,6 +4203,7 @@ class Tuple(BaseContainer):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[Tuple]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -4389,7 +4419,7 @@ class While(_base_nodes.MultiLineWithElseBlockNode, _base_nodes.Statement):
         yield from self.orelse
 
     def _get_yield_nodes_skip_lambdas(self):
-        """A While node can contain a Yield node in the test"""
+        """A While node can contain a Yield node in the test."""
         yield from self.test._get_yield_nodes_skip_lambdas()
         yield from super()._get_yield_nodes_skip_lambdas()
 
@@ -4443,7 +4473,9 @@ class With(
         """The contents of the ``with`` block."""
 
         self.type_annotation: NodeNG | None = None  # can be None
-        """If present, this will contain the type annotation passed by a type comment"""
+        """If present, this will contain the type annotation passed by a type
+        comment.
+        """
 
         super().__init__(
             lineno=lineno,
@@ -4474,6 +4506,7 @@ class With(
 
     assigned_stmts: ClassVar[AssignedStmtsCall[With]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -4722,7 +4755,7 @@ class JoinedStr(NodeNG):
 
 
 class NamedExpr(_base_nodes.AssignTypeNode):
-    """Represents the assignment from the assignment expression
+    """Represents the assignment from the assignment expression.
 
     >>> import astroid
     >>> module = astroid.parse('if a := 1: pass')
@@ -4735,7 +4768,8 @@ class NamedExpr(_base_nodes.AssignTypeNode):
     optional_assign = True
     """Whether this node optionally assigns a variable.
 
-    Since NamedExpr are not always called they do not always assign."""
+    Since NamedExpr are not always called they do not always assign.
+    """
 
     def __init__(
         self,
@@ -4760,13 +4794,13 @@ class NamedExpr(_base_nodes.AssignTypeNode):
             source code. Note: This is after the last symbol.
         """
         self.target: NodeNG
-        """The assignment target
+        """The assignment target.
 
         :type: Name
         """
 
         self.value: NodeNG
-        """The value that gets assigned in the expression"""
+        """The value that gets assigned in the expression."""
 
         super().__init__(
             lineno=lineno,
@@ -4782,6 +4816,7 @@ class NamedExpr(_base_nodes.AssignTypeNode):
 
     assigned_stmts: ClassVar[AssignedStmtsCall[NamedExpr]]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -4810,6 +4845,7 @@ class NamedExpr(_base_nodes.AssignTypeNode):
 
     def scope(self) -> LocalsDictNodeNG:
         """The first parent node defining a new scope.
+
         These can be Module, FunctionDef, ClassDef, Lambda, or GeneratorExp nodes.
 
         :returns: The first parent scope node.
@@ -4829,6 +4865,7 @@ class NamedExpr(_base_nodes.AssignTypeNode):
 
     def set_local(self, name: str, stmt: AssignName) -> None:
         """Define that the given name is declared in the given statement node.
+
         NamedExpr's in Arguments, Keyword or Comprehension are evaluated in their
         parent's parent scope. So we add to their frame's locals.
 
@@ -4843,7 +4880,9 @@ class NamedExpr(_base_nodes.AssignTypeNode):
 
 class Unknown(_base_nodes.AssignTypeNode):
     """This node represents a node in a constructed AST where
-    introspection is not possible.  At the moment, it's only used in
+    introspection is not possible.
+
+     At the moment, it's only used in
     the args attribute of FunctionDef nodes where function signature
     introspection failed.
     """
@@ -4859,7 +4898,7 @@ class Unknown(_base_nodes.AssignTypeNode):
 
 
 class EvaluatedObject(NodeNG):
-    """Contains an object that has already been inferred
+    """Contains an object that has already been inferred.
 
     This class is useful to pre-evaluate a particular node,
     with the resulting class acting as the non-evaluated node.
@@ -4873,10 +4912,10 @@ class EvaluatedObject(NodeNG):
         self, original: NodeNG, value: NodeNG | type[util.Uninferable]
     ) -> None:
         self.original: NodeNG = original
-        """The original node that has already been evaluated"""
+        """The original node that has already been evaluated."""
 
         self.value: NodeNG | type[util.Uninferable] = value
-        """The inferred value"""
+        """The inferred value."""
 
         super().__init__(
             lineno=self.original.lineno,
@@ -5161,6 +5200,7 @@ class MatchMapping(_base_nodes.AssignTypeNode, Pattern):
         ]
     ]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -5268,6 +5308,7 @@ class MatchStar(_base_nodes.AssignTypeNode, Pattern):
         ]
     ]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
@@ -5339,6 +5380,7 @@ class MatchAs(_base_nodes.AssignTypeNode, Pattern):
         ]
     ]
     """Returns the assigned statement (non inferred) according to the assignment type.
+
     See astroid/protocols.py for actual implementation.
     """
 
